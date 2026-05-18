@@ -70,6 +70,7 @@ Server Settings:
  SERVER_PASSWORD:     $(if [[ -n "${SERVER_PASSWORD}" ]]; then echo -e "${HILITE}SET${NC}"; else echo -e "${INFO}NOT SET${NC}"; fi)
  MAX_PLAYERS:         ${INFO}${MAX_PLAYERS:-"(not set, using existing)"}${NC}
  MAX_ADMINS:          ${INFO}${MAX_ADMINS:-"(not set, using existing)"}${NC}
+
  GAME_PORT:           ${INFO}${GAME_PORT}${NC}
  QUERY_PORT:          ${INFO}${QUERY_PORT}${NC}
  SAVE_NAME:           ${INFO}${SAVE_NAME}${NC}
@@ -171,6 +172,7 @@ patch_host_settings() {
 
     jq --argjson v "${GAME_PORT}" '.Port = $v' "${tmp}" > "${tmp}.new" && mv "${tmp}.new" "${tmp}"
     jq --argjson v "${QUERY_PORT}" '.QueryPort = $v' "${tmp}" > "${tmp}.new" && mv "${tmp}.new" "${tmp}"
+    jq --arg v "${SAVE_NAME}" '.SaveName = $v' "${tmp}" > "${tmp}.new" && mv "${tmp}.new" "${tmp}"
 
     jq --argjson v "${LIST_ON_STEAM}" '.ListOnSteam = $v' "${tmp}" > "${tmp}.new" && mv "${tmp}.new" "${tmp}"
 
@@ -240,8 +242,9 @@ if [[ ! -d "${WINEPREFIX}" ]]; then
 fi
 
 echo -e "${INFO}Launching ${GAMENAME} Dedicated Server...${NC}"
+cd "${SERVERHOME}" || exit 1
 gosu steam:steam xvfb-run --auto-servernum \
-    wine "${SERVERHOME}/${BINARY}" \
+    wine64 "${BINARY}" \
     -persistentDataPath "${GAMEDATA}" \
     -saveName "${SAVE_NAME}" &
 ServerPID=$!

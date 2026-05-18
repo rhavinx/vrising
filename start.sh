@@ -222,6 +222,7 @@ if [[ "${SKIP_UPDATE}" == "0" ]] || [[ ! -f "${SERVERHOME}/${BINARY}" ]]; then
 fi
 
 check_avx
+echo "${APPID}" > "${SERVERHOME}/steam_appid.txt"
 copy_settings_templates
 patch_host_settings
 

@@ -224,13 +224,14 @@ if [[ "${SKIP_UPDATE}" == "0" ]] || [[ ! -f "${SERVERHOME}/${BINARY}" ]]; then
 fi
 
 check_avx
-echo "${APPID}" > "${SERVERHOME}/steam_appid.txt"
 copy_settings_templates
 patch_host_settings
 
 chown -R steam:steam "/home/steam/.steam"
 chown -R steam:steam "/home/steam/steamcmd"
 chown -R steam:steam "/home/steam/Steam"
+
+export HOME="/home/steam"
 
 # Wine prefix in data volume — persistent, initialized once
 export WINEPREFIX="${GAMEDATA}/.wine"
